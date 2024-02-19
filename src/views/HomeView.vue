@@ -1,9 +1,14 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import Layout from '@/components/Layout.vue';
+import TopNav from '@/components/TopNav.vue';
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <Layout>
+      <TopNav />
+      Hello
+    </Layout>
+
   </main>
 </template>
