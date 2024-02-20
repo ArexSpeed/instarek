@@ -28,7 +28,8 @@ onMounted(() => {
                         class="absolute z-[-1] -top-[5px] left-[4px] rounded-full rotate-45 w-[64px] h-[64px] contrast-[1.3]  bg-gradient-to-t from-yellow-300 to-purple-500 via-red-500">
                         <div class="rounded-full ml-[3px] mt-[3px] w-[58px] h-[58px] bg-white" />
                     </div>
-                    <img class="rounded-full w-[56px] h-[56px] -mt-[1px]" src="">
+                    <img class="rounded-full w-[56px] h-[56px] -mt-[1px]"
+                        src="https://images.pexels.com/photos/19039431/pexels-photo-19039431/free-photo-of-palm-and-clouds.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
                     <div class="text-xs mt-2 w-[60px] truncate text-ellipsis overflow-hidden">Slide</div>
                 </a>
             </Slide>

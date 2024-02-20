@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import LoginView from '../views/LoginView.vue'
 import DiscoverView from '@/views/DiscoverView.vue'
 import AddPostView from '@/views/AddPostView.vue'
 import VideoView from '@/views/VideoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import ProfilePostsView from '@/views/ProfilePostsView.vue'
 import ChatsView from '@/views/ChatsView.vue'
 
 const router = createRouter({
@@ -13,6 +15,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
     },
     {
       path: '/discover',
@@ -31,8 +38,10 @@ const router = createRouter({
     },
     {
       path: '/profile',
-      name: 'profile',
-      component: ProfileView
+      children: [
+        { path: '', name: 'profile', component: ProfileView },
+        { path: 'posts', component: ProfilePostsView }
+      ]
     },
     {
       path: '/chats',

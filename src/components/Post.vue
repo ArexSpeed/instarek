@@ -52,14 +52,6 @@ const updateLike = (object) => {
 
         <LikesSection :post="post" @like="updateLike($event)" />
 
-        <div class="py-1 font-extrabold text-black">10 likes</div>
-        <div>
-            <span class="font-extrabold text-black">arexspeed</span>
-            Description or this post
-        </div>
-        <button @click="currentPost = post; openOverlay = true" class="py-1 font-extrabold text-gray-500">
-            View all 20 comments
-        </button>
     </div>
 
     <div class="pb-20"></div>

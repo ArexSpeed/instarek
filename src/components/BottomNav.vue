@@ -34,14 +34,15 @@ const path = router.currentRoute.value.path;
                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
                 </svg>
             </RouterLink>
-            <RouterLink to="/video" type="button"
+            <RouterLink to="/chats" type="button"
                 class="inline-flex flex-col items-center justify-center px-5 text-gray-600 hover:bg-gray-50"
-                :class="path === '/video' && 'border-t border-orange-300 text-orange-300'">
-                <svg class="w-5 h-5" data-slot="icon" fill="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path
-                        d="M4.5 4.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h8.25a3 3 0 0 0 3-3v-9a3 3 0 0 0-3-3H4.5ZM19.94 18.75l-2.69-2.69V7.94l2.69-2.69c.944-.945 2.56-.276 2.56 1.06v11.38c0 1.336-1.616 2.005-2.56 1.06Z">
-                    </path>
+                :class="path === '/chats' && 'border-t border-orange-300 text-orange-300'">
+                <svg aria-label="Chats" class="w-5 h-5" fill="currentColor" height="24" role="img" viewBox="0 0 24 24"
+                    width="24">
+                    <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218"
+                        y1="3" y2="10.083"></line>
+                    <polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
+                        stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
                 </svg>
             </RouterLink>
             <RouterLink to="/profile" type="button"
