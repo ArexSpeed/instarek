@@ -11,7 +11,7 @@ import PlayBoxOutline from 'vue-material-design-icons/PlayBoxOutline.vue';
 import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue';
 import AccountBoxOutline from 'vue-material-design-icons/AccountBoxOutline.vue';
 import PostGrid from '@/components/PostGrid.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, RouterLink } from 'vue-router';
 
 let data = reactive({ post: null })
 const form = reactive({ file: null })
@@ -63,16 +63,16 @@ onMounted(() => {
                 <div class="ml-6">
                     <div class="flex items-center mb-5 md:mb-8">
                         <div class="md:mr-6 mr-3 rounded-lg text-[22px]">{{ userStore?.user?.username }}</div>
-                        <button
+                        <RouterLink to="/profile/edit"
                             class="md:block hidden md:mr-6 p-1 px-4 rounded-lg text-[16px] font-extrabold bg-gray-100 hover:bg-gray-200">
                             Edit Profile
-                        </button>
+                        </RouterLink>
                         <Cog :size="28" class="cursor-pointer" />
                     </div>
-                    <button
+                    <RouterLink to="/profile/edit"
                         class="md:hidden mr-6 p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-extrabold bg-gray-100 hover:bg-gray-200">
                         Edit Profile
-                    </button>
+                    </RouterLink>
                     <div class="hidden md:block">
                         <div class="flex items-center text-[18px]">
                             <div class="mr-6">
