@@ -16,6 +16,6 @@ const { postByUser } = toRefs(props);
         @click="$emit('selectedPost', postByUser)">
 
         <img class="z-0 object-cover mx-auto cursor-pointer aspect-square"
-            src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+            :src="`https://bwglppilzhoxmasmvsra.supabase.co/storage/v1/object/public/images/${postByUser.url}`" alt="">
     </RouterLink>
 </template>

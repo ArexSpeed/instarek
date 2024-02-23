@@ -1,81 +1,56 @@
 <script setup>
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
+import { supabase } from '@/supabase';
+import { useUsersStore } from '@/stores/users';
 
-import { ref, onMounted } from 'vue';
-// import { useRouter } from 'vue-router';
-// import { getUserData, updateUserData } from "../services/users";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { storage } from "../firebase";
-// import { addUserData, selectedMyUserData } from "../context/slices/userSlice";
-// import { useAppDispatch, useAppSelector } from "../context/store";
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
+
+const userStore = useUsersStore();
+const { user } = storeToRefs(userStore);
 const image1Ref = ref(null);
 const profileForm = ref(null);
 const imagePreview = ref('');
-const userData = ref({
-    id: "",
-    nickname: "",
-    birth: "",
-    description: "",
-    firstName: "",
-    imageSrc: "",
-    lastName: "",
-    location: "",
-    profession: "",
-    sex: "",
-    shortDescription: "",
-});
-// const dispatch = useAppDispatch();
-// const myUser = useAppSelector(selectedMyUserData);
-// const navigate = useRouter().push;
-// const openToast = ref(false);
-
-// onMounted(async () => {
-//   const data = await getUserData(myUser.user.nickname);
-//   userData.value = data;
-// });
+const file = ref(null);
+const caption = ref("");
 
 const handleImagePreview = (e) => {
-    //   const file = e.target.files[0];
-    //   const url = URL.createObjectURL(file);
-    //   imagePreview.value = url;
-    //   uploadImage(file);
+    const url = URL.createObjectURL(e.target.files[0]);
+    imagePreview.value = url;
+    file.value = e.target.files[0];
 };
 
-const uploadImage = (file) => {
-    //   const imageRef = ref(storage, `images/${file.name}`);
-    //   uploadBytes(imageRef, file).then((snapshot) => {
-    //     getDownloadURL(snapshot.ref).then((url) => {
-    //       userData.value.imageSrc = url;
-    //     });
-    //   });
+const uploadImage = async () => {
+    let filePath;
+    const fileName = Math.floor(Math.random() * 10000000);
+    const { data, error } = await supabase.storage.from("images").upload('public/' + fileName, file.value);
+
+    if (error) {
+        loading.value = false;
+        return errorMessage.value = "unable to uplaod image"
+    }
+
+    filePath = data.path;
+    await supabase.from("posts").insert({
+        url: filePath,
+        caption: caption.value,
+        owner_id: user.value.id
+    })
 };
 
 const onSubmit = async () => {
-    //   const form = new FormData(profileForm.value);
-    //   const payload = {
-    //     id: myUser.user.id,
-    //     nickname: userData.value.nickname,
-    //     birth: form.get("birth")?.toString() || userData.value.birth,
-    //     description: form.get("description")?.toString() || userData.value.description,
-    //     firstName: form.get("firstName")?.toString() || userData.value.firstName,
-    //     imageSrc: userData.value.imageSrc,
-    //     lastName: form.get("lastName")?.toString() || userData.value.lastName,
-    //     location: form.get("location")?.toString() || userData.value.location,
-    //     profession: form.get("profession")?.toString() || userData.value.profession,
-    //     sex: form.get("sex")?.toString() || userData.value.sex,
-    //     shortDescription:
-    //       form.get("shortDescription")?.toString() || userData.value.shortDescription,
-    //   };
-
-    //   try {
-    //     await updateUserData(payload);
-    //     dispatch(addUserData(payload));
-    //     openToast.value = true;
-    //   } catch (e) {
-    //     console.error("Error adding document: ", e);
-    //   }
+    await uploadImage();
+    toast("Your image is added!", {
+        "type": "success",
+        "dangerouslyHTMLString": true
+    })
+    caption.value = "";
+    imagePreview.value = "";
+    file.value = null;
 };
 </script>
 
@@ -94,8 +69,6 @@ const onSubmit = async () => {
                                 +
                             </button>
                         </div>
-                        <img v-if="userData.imageSrc && imagePreview === ''" :src="userData.imageSrc" alt="Post"
-                            class="object-fill w-full h-full" />
                         <img v-if="imagePreview" :src="imagePreview" alt="Post" class="object-contain w-full h-full" />
                     </div>
                     <!-- Other form fields -->
@@ -103,9 +76,9 @@ const onSubmit = async () => {
                         <label className="block mb-2 text-sm font-medium text-gray-900">
                             Description
                         </label>
-                        <textarea id="description" name="description" rows="12"
+                        <textarea id="caption" name="caption" rows="12"
                             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-red-200 focus:border-red-200 "
-                            placeholder="Description" defaultValue="Your description"></textarea>
+                            placeholder="Description" v-model="caption"></textarea>
                     </div>
                     <button type="submit"
                         class="text-white bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>

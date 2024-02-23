@@ -59,8 +59,8 @@ const isHeartActiveComputed = () => { }
     </div>
     <div class="my-2 text-sm font-medium">4,047 likes</div>
     <div class="flex space-x-2 text-sm">
-        <a href="" class="font-medium">arexspeed</a>
-        <p>The best holiday👊🔥...</p>
+        <a href="" class="font-medium">{{ post.owner_id.username }}</a>
+        <p>{{ post.caption }}</p>
     </div>
     <div class="py-2 text-sm text-gray-400 cursor-pointer">View all 13 comments</div>
 </template>

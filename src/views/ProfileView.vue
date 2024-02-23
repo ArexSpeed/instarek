@@ -1,24 +1,33 @@
 <script setup>
-import { onMounted, reactive, toRefs } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
 import { useUsersStore } from '@/stores/users';
+import { supabase } from '@/supabase';
 
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Grid from 'vue-material-design-icons/Grid.vue';
 import PlayBoxOutline from 'vue-material-design-icons/PlayBoxOutline.vue';
 import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue';
 import AccountBoxOutline from 'vue-material-design-icons/AccountBoxOutline.vue';
-import ContentOverlay from '@/components/ContentOverlay.vue';
+import PostGrid from '@/components/PostGrid.vue';
 import { useRouter } from 'vue-router';
 
 let data = reactive({ post: null })
 const form = reactive({ file: null })
 const userStore = useUsersStore();
 const router = useRouter();
+const posts = ref(null)
+const loading = ref(false);
 
-const props = defineProps({ postsByUser: Object, user: Object })
-//const { postsByUser, user } = toRefs(props)
+const fetchUserPosts = async () => {
+    loading.value = true;
+    const { data: postsData } = await supabase.from("posts").select().eq('owner_id', userStore.user.id)
+
+    posts.value = postsData;
+    loading.value = false;
+    console.log(postsData);
+}
 
 const getUploadedImage = (e) => {
     form.file = e.target.files[0]
@@ -31,6 +40,7 @@ onMounted(() => {
     if (!userStore.user) {
         router.push('/login');
     }
+    fetchUserPosts();
 })
 
 </script>
@@ -66,7 +76,7 @@ onMounted(() => {
                     <div class="hidden md:block">
                         <div class="flex items-center text-[18px]">
                             <div class="mr-6">
-                                <span class="font-extrabold">18</span> posts
+                                <span class="font-extrabold">{{ posts?.length }}</span> posts
                             </div>
                             <div class="mr-6">
                                 <span class="font-extrabold">123</span> followers
@@ -88,7 +98,7 @@ onMounted(() => {
         <div class="md:hidden">
             <div class="flex items-center justify-around w-full mt-8 border-t border-t-gray-300">
                 <div class="p-3 text-center">
-                    <div class="font-extrabold">30</div>
+                    <div class="font-extrabold">{{ posts?.length }}</div>
                     <div class="text-gray-400 font-semibold -mt-1.5">posts</div>
                 </div>
                 <div class="p-3 text-center">
@@ -141,8 +151,8 @@ onMounted(() => {
             </div>
         </div>
         <div class="relative grid grid-cols-3 gap-1 md:gap-4">
-            <div v-for="postByUser in 10" :key="postByUser">
-                <ContentOverlay :postByUser="postByUser" @selectedPost="data.post = $event" />
+            <div v-for="postByUser in posts" :key="postByUser.id">
+                <PostGrid :postByUser="postByUser" @selectedPost="data.post = $event" />
             </div>
         </div>
 

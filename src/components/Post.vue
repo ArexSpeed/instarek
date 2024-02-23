@@ -1,6 +1,27 @@
 <script setup>
 import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue';
 import LikesSection from './LikesSection.vue';
+import { RouterLink } from 'vue-router';
+
+const { posts } = defineProps(['posts']);
+console.log(posts, "post")
+/*
+Post type:
+type Post = {
+    id: number,
+    created_at: string,
+    url: string,
+    caption: string,
+    owner_id: {
+        created_at: string,
+        id: number,
+        email: string,
+        username: string
+        imageUrl: string
+    }
+}
+*/
+
 const updateLike = (object) => {
     let deleteLike = false
     let id = null
@@ -28,14 +49,14 @@ const updateLike = (object) => {
 </script>
 
 <template>
-    <div id="Posts" class="px-4 max-w-[600px] mx-auto mt-10" v-for="post in 10" :key="post">
+    <div id="Posts" class="px-4 max-w-[600px] mx-auto mt-10" v-for="post in posts" :key="post.id">
         <div class="flex items-center justify-between py-2">
             <div class="flex items-center">
-                <a href="/" class="flex items-center">
+                <RouterLink :to="`/profile/${post.owner_id.id.toString()}`" class="flex items-center">
                     <img class="rounded-full w-[38px] h-[38px]"
                         src="https://images.pexels.com/photos/18771871/pexels-photo-18771871/free-photo-of-town-with-beach-on-amalfi-coast.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-                    <div class="ml-4 font-extrabold text-[15px]">Arex Speed</div>
-                </a>
+                    <div class="ml-4 font-extrabold text-[15px]">{{ post.owner_id.username }}</div>
+                </RouterLink>
                 <div class="flex items-center text-[15px] text-gray-500">
                     <span class="-mt-5 ml-2 mr-[5px] text-[35px]">.</span>
                     <div>10.10.2022</div>
@@ -45,9 +66,9 @@ const updateLike = (object) => {
             <DotsHorizontal class="cursor-pointer" :size="27" />
         </div>
 
-        <div class="bg-black rounded-lg w-full min-h-[400px] flex items-center">
+        <div class="flex items-center w-full h-auto bg-black rounded-lg">
             <img class="w-full mx-auto"
-                src="https://images.pexels.com/photos/19039431/pexels-photo-19039431/free-photo-of-palm-and-clouds.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+                :src="`https://bwglppilzhoxmasmvsra.supabase.co/storage/v1/object/public/images/${post.url}`" alt="" />
         </div>
 
         <LikesSection :post="post" @like="updateLike($event)" />

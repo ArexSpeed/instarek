@@ -6,6 +6,7 @@ import AddPostView from '@/views/AddPostView.vue'
 import VideoView from '@/views/VideoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ProfilePostsView from '@/views/ProfilePostsView.vue'
+import ProfileUserView from '@/views/ProfileUserView.vue'
 import ChatsView from '@/views/ChatsView.vue'
 
 const router = createRouter({
@@ -40,7 +41,8 @@ const router = createRouter({
       path: '/profile',
       children: [
         { path: '', name: 'profile', component: ProfileView },
-        { path: 'posts', component: ProfilePostsView }
+        { path: 'posts', component: ProfilePostsView },
+        { path: ':userId', component: ProfileUserView }
       ]
     },
     {
