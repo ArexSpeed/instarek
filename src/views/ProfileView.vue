@@ -1,7 +1,8 @@
 <script setup>
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
+import { useUsersStore } from '@/stores/users';
 
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Grid from 'vue-material-design-icons/Grid.vue';
@@ -9,12 +10,15 @@ import PlayBoxOutline from 'vue-material-design-icons/PlayBoxOutline.vue';
 import BookmarkOutline from 'vue-material-design-icons/BookmarkOutline.vue';
 import AccountBoxOutline from 'vue-material-design-icons/AccountBoxOutline.vue';
 import ContentOverlay from '@/components/ContentOverlay.vue';
+import { useRouter } from 'vue-router';
 
 let data = reactive({ post: null })
 const form = reactive({ file: null })
+const userStore = useUsersStore();
+const router = useRouter();
 
 const props = defineProps({ postsByUser: Object, user: Object })
-const { postsByUser, user } = toRefs(props)
+//const { postsByUser, user } = toRefs(props)
 
 const getUploadedImage = (e) => {
     form.file = e.target.files[0]
@@ -23,11 +27,17 @@ const getUploadedImage = (e) => {
     })
 }
 
+onMounted(() => {
+    if (!userStore.user) {
+        router.push('/login');
+    }
+})
+
 </script>
 
 <template>
     <Layout>
-        <TopNav title="Username" />
+        <TopNav :title="userStore?.user?.username" />
         <div class="pt-2 md:pt-6"></div>
         <div class="max-w-[880px] lg:ml-0 md:ml-[80px] md:pl-20 px-4 w-[100vw]">
             <div class="flex items-center w-full">
@@ -42,7 +52,7 @@ const getUploadedImage = (e) => {
 
                 <div class="ml-6">
                     <div class="flex items-center mb-5 md:mb-8">
-                        <div class="md:mr-6 mr-3 rounded-lg text-[22px]">Arex Speed</div>
+                        <div class="md:mr-6 mr-3 rounded-lg text-[22px]">{{ userStore?.user?.username }}</div>
                         <button
                             class="md:block hidden md:mr-6 p-1 px-4 rounded-lg text-[16px] font-extrabold bg-gray-100 hover:bg-gray-200">
                             Edit Profile
