@@ -3,7 +3,7 @@ import { onMounted, reactive, ref } from 'vue'
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
 import { useUsersStore } from '@/stores/users';
-import { supabase } from '@/supabase';
+import { sourceUrl, supabase } from '@/supabase';
 
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Grid from 'vue-material-design-icons/Grid.vue';
@@ -19,6 +19,22 @@ const userStore = useUsersStore();
 const router = useRouter();
 const posts = ref(null)
 const loading = ref(false);
+const currentUser = ref(null);
+
+const fetchData = async () => {
+    console.log('fetching')
+    loading.value = true;
+    const { data: userData } = await supabase.from("users").select().eq('id', userStore.user.id).single();
+
+    if (!userData) {
+        loading.value = false;
+        return currentUser.value = null
+    }
+    currentUser.value = userData
+    fetchUserPosts();
+    loading.value = false;
+    console.log(currentUser.value)
+}
 
 const fetchUserPosts = async () => {
     loading.value = true;
@@ -40,7 +56,7 @@ onMounted(() => {
     if (!userStore.user) {
         router.push('/login');
     }
-    fetchUserPosts();
+    fetchData();
 })
 
 </script>
@@ -53,8 +69,12 @@ onMounted(() => {
             <div class="flex items-center w-full">
 
                 <label for="fileUser">
-                    <img class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
+                    <img v-if="currentUser?.imageUrl" class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
+                        :src="`${sourceUrl}${currentUser?.imageUrl}`">
+
+                    <img v-else class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
                         src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+
                 </label>
                 <!-- <input v-if="user.id === $page.props.auth.user.id" id="fileUser" class="hidden" type="file"
                         @input="getUploadedImage($event)"> -->
@@ -91,7 +111,7 @@ onMounted(() => {
 
             </div>
             <div class="py-2">
-                Description
+                {{ currentUser?.description }}
             </div>
         </div>
 

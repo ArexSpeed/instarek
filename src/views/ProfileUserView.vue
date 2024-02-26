@@ -3,7 +3,7 @@ import { onMounted, reactive, ref } from 'vue'
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
 import { useUsersStore } from '@/stores/users';
-import { supabase } from '@/supabase';
+import { supabase, sourceUrl } from '@/supabase';
 
 import Grid from 'vue-material-design-icons/Grid.vue';
 import PlayBoxOutline from 'vue-material-design-icons/PlayBoxOutline.vue';
@@ -37,6 +37,7 @@ const fetchData = async () => {
     currentUser.value = userData
     fetchUserPosts();
     loading.value = false;
+    console.log(currentUser.value)
 }
 
 const fetchUserPosts = async () => {
@@ -66,7 +67,11 @@ onMounted(() => {
                 <div class="flex items-center w-full">
 
                     <label for="fileUser">
-                        <img class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
+                        <img v-if="currentUser?.imageUrl"
+                            class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
+                            :src="`${sourceUrl}${currentUser?.imageUrl}`">
+
+                        <img v-else class="rounded-full object-cover w-[100px] h-[100px] cursor-pointer"
                             src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
                     </label>
 

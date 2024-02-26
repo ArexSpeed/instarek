@@ -2,6 +2,7 @@
 import DotsHorizontal from 'vue-material-design-icons/DotsHorizontal.vue';
 import LikesSection from './LikesSection.vue';
 import { RouterLink } from 'vue-router';
+import { sourceUrl } from '@/supabase';
 
 const { posts } = defineProps(['posts']);
 console.log(posts, "post")
@@ -53,12 +54,13 @@ const updateLike = (object) => {
         <div class="flex items-center justify-between py-2">
             <div class="flex items-center">
                 <RouterLink :to="`/profile/${post.owner_id.id.toString()}`" class="flex items-center">
-                    <img class="rounded-full w-[38px] h-[38px]"
-                        src="https://images.pexels.com/photos/18771871/pexels-photo-18771871/free-photo-of-town-with-beach-on-amalfi-coast.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-                    <div class="ml-4 font-extrabold text-[15px]">{{ post.owner_id.username }}</div>
+                    <!-- <img class="rounded-full w-9 h-9" :src="`${sourceUrl}${post.owner_id.imageUrl}`"> -->
+                    <img class="rounded-full w-9 h-9"
+                        :src="`${post.owner_id.imageUrl ? `${sourceUrl}${post.owner_id.imageUrl}` : `https://images.pexels.com/photos/18771871/pexels-photo-18771871/free-photo-of-town-with-beach-on-amalfi-coast.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}`">
+                    <div class="ml-4 font-extrabold">{{ post.owner_id.username }}</div>
                 </RouterLink>
-                <div class="flex items-center text-[15px] text-gray-500">
-                    <span class="-mt-5 ml-2 mr-[5px] text-[35px]">.</span>
+                <div class="flex items-center text-gray-500">
+                    <span class="-mt-5 ml-2 mr-1 text-[30px]">.</span>
                     <div>10.10.2022</div>
                 </div>
             </div>
@@ -67,8 +69,7 @@ const updateLike = (object) => {
         </div>
 
         <div class="flex items-center w-full h-auto bg-black rounded-lg">
-            <img class="w-full mx-auto"
-                :src="`https://bwglppilzhoxmasmvsra.supabase.co/storage/v1/object/public/images/${post.url}`" alt="" />
+            <img class="w-full mx-auto" :src="`${sourceUrl}${post.url} `" alt="" />
         </div>
 
         <LikesSection :post="post" @like="updateLike($event)" />

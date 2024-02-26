@@ -1,10 +1,10 @@
 <script setup>
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
-import { supabase } from '@/supabase';
+import { supabase, sourceUrl } from '@/supabase';
 import { useUsersStore } from '@/stores/users';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -19,6 +19,20 @@ const imagePreview = ref('');
 const file = ref(null);
 const caption = ref("");
 const router = useRouter();
+const loading = ref(false);
+
+const fetchData = async () => {
+    loading.value = true;
+    const { data: userData } = await supabase.from("users").select().eq('id', userStore.user.id).single();
+
+    if (!userData) {
+        loading.value = false;
+    }
+    console.log(userData);
+    imagePreview.value = `${sourceUrl}${userData.imageUrl}`;
+    caption.value = userData.description
+    loading.value = false;
+}
 
 const handleImagePreview = (e) => {
     const url = URL.createObjectURL(e.target.files[0]);
@@ -55,6 +69,10 @@ const onSubmit = async () => {
     file.value = null;
     router.push('/profile')
 };
+
+onMounted(() => {
+    fetchData();
+})
 </script>
 
 <template>
@@ -72,7 +90,7 @@ const onSubmit = async () => {
                                 +
                             </button>
                         </div>
-                        <img v-if="imagePreview" :src="imagePreview" alt="Post"
+                        <img v-if="imagePreview" :src="imagePreview" alt=""
                             class="object-cover w-[250px] h-[250px] rounded-full" />
                     </div>
                     <!-- Other form fields -->
