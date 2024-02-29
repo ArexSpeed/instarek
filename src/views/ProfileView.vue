@@ -26,6 +26,11 @@ const userInfo = reactive({
     followers: 0,
     following: 0
 })
+const followers = ref([]);
+const following = ref([]);
+const isFollowing = ref(false);
+
+const currentTabView = ref('posts')
 
 const fetchData = async () => {
     console.log('fetching')
@@ -47,10 +52,10 @@ const fetchUserPosts = async () => {
     const { data: postsData } = await supabase.from("posts").select().eq('owner_id', userStore.user.id)
 
     posts.value = postsData;
-    const followerCount = await fetchFollowersCount();
-    const followingCount = await fetchFollowingCount();
-    userInfo.followers = followerCount;
-    userInfo.following = followingCount;
+    await fetchFollowersCount();
+    await fetchFollowingCount();
+    userInfo.followers = followers.value.length;
+    userInfo.following = following.value.length;
     userInfo.posts = postsData.length;
     loading.value = false;
     console.log(postsData);
@@ -64,21 +69,27 @@ const getUploadedImage = (e) => {
 }
 
 const fetchFollowersCount = async () => {
-    const { count } = await supabase
+    const { data: followerData } = await supabase
         .from("followers_following")
-        .select("*", { count: 'exact' })
+        .select("*, follower_id(*)")
         .eq("following_id", userStore.user.id)
-    console.log("followers_count", count)
-    return count;
+    followers.value = followerData;
+    console.log("followers", followerData);
 }
 
 const fetchFollowingCount = async () => {
-    const { count } = await supabase
+    const { data: followingData } = await supabase
         .from("followers_following")
-        .select("*", { count: 'exact' })
+        .select("*, following_id(*)")
         .eq("follower_id", userStore.user.id)
-    console.log("following_count", count)
-    return count;
+    following.value = followingData;
+    console.log("following", followingData);
+
+
+}
+
+const changeTabView = (value) => {
+    currentTabView.value = value
 }
 
 onMounted(() => {
@@ -129,15 +140,15 @@ onMounted(() => {
 
         <div>
             <div class="flex items-center justify-around w-full mt-8 border-t border-t-gray-300">
-                <div class="p-3 text-center">
+                <div @click="changeTabView('posts')" class="p-3 text-center cursor-pointer">
                     <div class="font-extrabold">{{ userInfo.posts }}</div>
                     <div class="text-gray-400 font-semibold -mt-1.5">posts</div>
                 </div>
-                <div class="p-3 text-center">
+                <div @click="changeTabView('followers')" class="p-3 text-center cursor-pointer">
                     <div class="font-extrabold">{{ userInfo.followers }}</div>
                     <div class="text-gray-400 font-semibold -mt-1.5">followers</div>
                 </div>
-                <div class="p-3 text-center">
+                <div @click="changeTabView('following')" class="p-3 text-center cursor-pointer">
                     <div class="font-extrabold">{{ userInfo.following }}</div>
                     <div class="text-gray-400 font-semibold -mt-1.5">following</div>
                 </div>
@@ -159,13 +170,18 @@ onMounted(() => {
             </div>
         </div>
 
-        <div class="relative grid grid-cols-3 gap-1 md:gap-4">
+        <div v-if="currentTabView === 'posts'" class="relative grid grid-cols-3 gap-1 md:gap-4">
             <div v-for="postByUser in posts" :key="postByUser.id">
                 <PostGrid :postByUser="postByUser" @selectedPost="data.post = $event" />
             </div>
         </div>
-        <div class="">
-            <FollowersList />
+        <div v-if="currentTabView === 'followers'" v-for="follower in followers" class="flex flex-col gap-2 p-2"
+            key="follower.id">
+            <FollowersList :follower="follower" />
+        </div>
+        <div v-if="currentTabView === 'following'" v-for="follower in following" class="flex flex-col gap-2 p-2"
+            key="follower.id">
+            <FollowersList :follower="follower" />
         </div>
 
         <div class="pb-20"></div>
