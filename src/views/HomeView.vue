@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import Layout from '@/components/Layout.vue';
 import Post from '@/components/Post.vue';
 import StoriesSlider from '@/components/StoriesSlider.vue';
+import AddStories from '@/components/AddStories.vue';
 import TopNav from '@/components/TopNav.vue';
 import { supabase } from '@/supabase';
 
@@ -26,8 +27,11 @@ onMounted(() => {
 <template>
   <Layout>
     <TopNav />
+    <section class="flex py-4 pl-4 overflow-x-scroll border-b border-gray-100 gap-x-4 no-scrollbar">
+      <AddStories />
+      <StoriesSlider v-for="story in 10" />
+    </section>
 
-    <StoriesSlider />
     <div v-if="!loading">
       <Post :posts="posts" />
     </div>

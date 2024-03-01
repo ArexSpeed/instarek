@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import DiscoverView from '@/views/DiscoverView.vue'
 import AddPostView from '@/views/AddPostView.vue'
+import AddStoriesView from '@/views/AddStoriesView.vue'
 import VideoView from '@/views/VideoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ProfilePostsView from '@/views/ProfilePostsView.vue'
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/addpost',
       name: 'addpost',
       component: AddPostView
+    },
+    {
+      path: '/addstories',
+      name: 'addstories',
+      component: AddStoriesView
     },
     {
       path: '/video',
