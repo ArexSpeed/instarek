@@ -8,6 +8,7 @@ import TopNav from '@/components/TopNav.vue';
 import { supabase } from '@/supabase';
 
 const posts = ref([]);
+const stories = ref([]);
 const loading = ref(false);
 
 const fetchPosts = async () => {
@@ -19,8 +20,16 @@ const fetchPosts = async () => {
   console.log(postsData);
 }
 
+const fetchStories = async () => {
+  loading.value = true;
+  const { data: storiesData } = await supabase.from("stories").select('*, owner_id(*)')
+  stories.value = storiesData;
+  loading.value = false;
+}
+
 onMounted(() => {
   fetchPosts();
+  fetchStories();
 })
 </script>
 
@@ -29,6 +38,7 @@ onMounted(() => {
     <TopNav />
     <section class="flex py-4 pl-4 overflow-x-scroll border-b border-gray-100 gap-x-4 no-scrollbar">
       <AddStories />
+      <StoriesSlider v-for="story in stories" :key="story.id" :storyId="story.id" :username="story.owner_id.username" />
       <StoriesSlider v-for="story in 10" />
     </section>
 

@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, toRefs } from 'vue'
+import { RouterLink } from 'vue-router';
+const { storyId, username } = defineProps(['storyId', 'username'])
 
 </script>
 <template>
-    <div class="flex flex-col items-center flex-shrink-0 cursor-pointer">
+    <RouterLink :to="`/stories/${storyId}`" class="flex flex-col items-center flex-shrink-0 cursor-pointer">
         <div class="rounded-full p-0.5 flex flex-col space-y-1 from-purple-600 bg-gradient-to-bl via-red-600 to-yellow-500"
             @click="handleStoryBoxClick">
             <img :src="`https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`"
@@ -11,7 +13,7 @@ import { ref, onMounted, toRefs } from 'vue'
         </div>
 
         <span class="text-sm text-gray-800">
-            Arex
+            {{ username }}
         </span>
-    </div>
+    </RouterLink>
 </template>
