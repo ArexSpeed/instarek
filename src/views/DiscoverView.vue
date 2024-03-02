@@ -1,4 +1,6 @@
 <script setup>
+import DiscoverContainer from '@/components/DiscoverContainer.vue';
+import DiscoverSearch from '@/components/DiscoverSearch.vue';
 import Layout from '@/components/Layout.vue';
 import TopNav from '@/components/TopNav.vue';
 
@@ -24,7 +26,8 @@ const videos = [
 
 <template>
     <Layout>
-        <TopNav title="Discover" />
+        <!-- <TopNav title="Discover" /> -->
+        <DiscoverSearch />
         <!-- <div class="container p-4 mx-auto">
                 <div class="grid grid-cols-3 gap-4">
                     <div v-for="post in posts" :key="post.id"
@@ -37,7 +40,7 @@ const videos = [
                     </div>
                 </div>
             </div> -->
-        <div class="grid grid-cols-3 gap-0">
+        <!-- <div class="grid grid-cols-3 gap-0">
             <div><img :src="posts[0].image" alt="Post" class="object-cover w-full h-full" /></div>
             <div><img :src="posts[1].image" alt="Post" class="object-cover w-full h-full" /></div>
             <div class="col-start-1 row-start-2"><img :src="posts[2].image" alt="Post" class="object-cover w-full h-full" />
@@ -56,7 +59,7 @@ const videos = [
             <div class="col-start-3 row-start-4"><img :src="posts[9].image" alt="Post" class="object-cover w-full h-full" />
             </div>
 
-        </div>
+        </div> -->
         <!-- <div class="grid grid-cols-3 gap-0">
                 <div>1</div>
                 <div>2</div>
@@ -70,5 +73,6 @@ const videos = [
                 <div class="col-start-3 row-start-4">14</div>
 
             </div> -->
+        <DiscoverContainer />
     </Layout>
 </template>
