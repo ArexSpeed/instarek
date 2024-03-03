@@ -53,7 +53,7 @@ const router = createRouter({
       path: '/profile',
       children: [
         { path: '', name: 'profile', component: ProfileView },
-        { path: 'posts', component: ProfilePostsView },
+        { path: 'posts/:userId', component: ProfilePostsView },
         { path: ':userId', component: ProfileUserView },
         { path: 'edit', component: EditProfileView }
       ]

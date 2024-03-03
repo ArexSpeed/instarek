@@ -10,8 +10,8 @@ const { postByUser } = toRefs(props);
 </script>
 
 <template>
-    <RouterLink to="/profile/posts" class="relative flex items-center justify-center cursor-pointer"
-        @click="$emit('selectedPost', postByUser)">
+    <RouterLink :to="`/profile/posts/${postByUser.owner_id}`"
+        class="relative flex items-center justify-center cursor-pointer" @click="$emit('selectedPost', postByUser)">
 
         <img class="z-0 object-cover mx-auto cursor-pointer aspect-square" :src="`${sourceUrl}${postByUser.url}`" alt="">
     </RouterLink>

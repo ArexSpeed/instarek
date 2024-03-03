@@ -15,7 +15,7 @@ import ProfileDetails from '@/components/ProfileDetails.vue';
 let data = reactive({ post: null })
 const userStore = useUsersStore();
 const router = useRouter();
-const posts = ref(null)
+const posts = ref([])
 const loading = ref(false);
 const currentUser = ref(null);
 const userInfo = reactive({
