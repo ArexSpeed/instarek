@@ -10,6 +10,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import ProfilePostsView from '@/views/ProfilePostsView.vue'
 import ProfileUserView from '@/views/ProfileUserView.vue'
 import EditProfileView from '@/views/EditProfileView.vue'
+import FollowsView from '@/views/FollowsView.vue'
 import ChatsView from '@/views/ChatsView.vue'
 import StoriesView from '@/views/StoriesView.vue'
 
@@ -56,6 +57,11 @@ const router = createRouter({
         { path: ':userId', component: ProfileUserView },
         { path: 'edit', component: EditProfileView }
       ]
+    },
+    {
+      path: '/follows/:userId',
+      name: 'follows',
+      component: FollowsView
     },
     {
       path: '/chats',
