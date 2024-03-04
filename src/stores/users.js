@@ -42,7 +42,8 @@ export const useUsersStore = defineStore('users', () => {
     user.value = {
       id: existingUser.id,
       email: existingUser.email,
-      username: existingUser.username
+      username: existingUser.username,
+      imageUrl: existingUser.imageUrl
     }
 
     loading.value = false
@@ -96,7 +97,8 @@ export const useUsersStore = defineStore('users', () => {
     user.value = {
       id: newUser.id,
       email: newUser.email,
-      username: newUser.username
+      username: newUser.username,
+      imageUrl: newUser.imageUrl
     }
 
     loading.value = false
@@ -123,7 +125,8 @@ export const useUsersStore = defineStore('users', () => {
     user.value = {
       username: userWithEmail.username,
       email: userWithEmail.email,
-      id: userWithEmail.id
+      id: userWithEmail.id,
+      imageUrl: userWithEmail.imageUrl
     }
     loadingUser.value = false
   }

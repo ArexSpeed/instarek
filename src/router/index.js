@@ -12,6 +12,7 @@ import ProfileUserView from '@/views/ProfileUserView.vue'
 import EditProfileView from '@/views/EditProfileView.vue'
 import FollowsView from '@/views/FollowsView.vue'
 import ChatsView from '@/views/ChatsView.vue'
+import ChatMessagesView from '@/views/ChatMessagesView.vue'
 import StoriesView from '@/views/StoriesView.vue'
 
 const router = createRouter({
@@ -65,8 +66,10 @@ const router = createRouter({
     },
     {
       path: '/chats',
-      name: 'chats',
-      component: ChatsView
+      children: [
+        { path: '', name: 'chats', component: ChatsView },
+        { path: ':chatId', component: ChatMessagesView }
+      ]
     },
     {
       path: '/stories/:id',

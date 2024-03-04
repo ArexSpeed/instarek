@@ -13,6 +13,8 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import ProfileDetails from '@/components/ProfileDetails.vue';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 const router = useRouter();
 const route = useRoute();
@@ -102,6 +104,32 @@ const fetchFollowingCount = async () => {
     return count;
 }
 
+async function createNewChatToDb() {
+    console.log("logged", loggedUser.value)
+    console.log("current", currentUser.value)
+    const users = [
+        {
+            id: loggedUser.value.id,
+            username: loggedUser.value.username,
+            imageUrl: loggedUser.value.imageUrl
+        },
+        {
+            id: currentUser.value.id,
+            username: currentUser.value.username,
+            imageUrl: currentUser.value.imageUrl
+        }
+    ]
+    try {
+        const docRef = await addDoc(collection(db, "instachats"), {
+            users,
+        });
+        router.push(`/chats/${docRef.id}`)
+        return docRef.id;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
+
 
 onMounted(() => {
     if (loggedUser.value.id.toString() === userId) {
@@ -134,7 +162,7 @@ watch(loggedUser, () => {
                     class="p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-bold bg-gray-100 hover:bg-gray-200">
                     Followed
                 </button>
-                <button @click=""
+                <button @click="createNewChatToDb"
                     class="p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-bold border border-blue-400 hover:bg-gray-100">
                     Message
                 </button>
