@@ -11,6 +11,9 @@ import {
     getDocs,
 } from "firebase/firestore";
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const chatsRef = ref([]);
 const userStore = useUsersStore();
 const { user: loggedUser } = storeToRefs(userStore)
@@ -33,12 +36,15 @@ async function getUserChats() {
 }
 
 onMounted(() => {
+    if (!userStore.user) {
+        return router.push('/login');
+    }
     getUserChats();
 })
 </script>
 
 <template>
-    <Layout>
+    <Layout v-if="userStore.user">
         <TopNav title="Chats" />
         <ChatList :chats="chatsRef" />
     </Layout>

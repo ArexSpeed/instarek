@@ -28,15 +28,15 @@ const fetchData = async () => {
     console.log('fetching')
     loading.value = true;
     const { data: userData } = await supabase.from("users").select().eq('id', userStore.user.id).single();
-
+    console.log('user data', userData);
     if (!userData) {
         loading.value = false;
         return currentUser.value = null
     }
-    currentUser.value = userData
+
     fetchUserPosts();
     loading.value = false;
-    console.log(currentUser.value)
+    return userData;
 }
 
 const fetchUserPosts = async () => {
@@ -66,22 +66,25 @@ const fetchFollowingCount = async () => {
     return count;
 }
 
-onMounted(() => {
+onMounted(async () => {
     if (!userStore.user) {
-        router.push('/login');
+        return router.push('/login');
     }
-    fetchData();
+    const userData = await fetchData();
+    currentUser.value = userData
+    console.log('curr', currentUser.value);
 })
 
 </script>
 
 <template>
-    <Layout>
+    <Layout v-if="userStore.user">
         <TopNav :title="userStore?.user?.username" />
 
         <ProfileDetails :image="`${sourceUrl}${currentUser?.imageUrl}`" :userId="userStore.user.id"
-            :username="userStore.user.username" :description="currentUser?.description" :posts="userInfo.posts"
-            :followers="userInfo.followers" :following="userInfo.following" />
+            :username="userStore.user.username" :description="currentUser?.description" :position="currentUser?.position"
+            :fullName="currentUser?.fullName" :posts="userInfo.posts" :followers="userInfo.followers"
+            :following="userInfo.following" />
         <div class="px-4 pt-2 pb-4 space-y-1">
             <RouterLink to="/profile/edit"
                 class="w-full px-4 py-1 text-sm font-medium text-center transition-colors bg-gray-100 rounded-md outline-none hover:bg-black/10">

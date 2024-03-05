@@ -175,8 +175,9 @@ watch(loggedUser, () => {
         <div v-if="!loading">
             <TopNav :title="currentUser?.username" />
             <ProfileDetails :image="`${sourceUrl}${currentUser?.imageUrl}`" :userId="currentUser?.id"
-                :username="currentUser?.username" :description="currentUser?.description" :posts="userInfo.posts"
-                :followers="userInfo.followers" :following="userInfo.following" />
+                :username="currentUser?.username" :description="currentUser?.description" :position="currentUser?.position"
+                :fullName="currentUser?.fullName" :posts="userInfo.posts" :followers="userInfo.followers"
+                :following="userInfo.following" />
             <div class="flex flex-row gap-2 px-4 pt-2 pb-4 space-y-1">
                 <button v-if="!isFollowing" @click="followUser"
                     class="p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-bold bg-blue-400 hover:bg-blue-300">

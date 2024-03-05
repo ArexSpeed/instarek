@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-const { image, userId, username, fullName, position, description, posts, followers, following } = defineProps(['image', 'userId', 'username', 'position', 'description', 'posts', 'followers', 'following'])
+const { image, userId, username, fullName, position, description, posts, followers, following } = defineProps(['user', 'image', 'userId', 'username', 'fullName', 'position', 'description', 'posts', 'followers', 'following'])
+
 </script>
 
 <template>
@@ -26,14 +27,14 @@ const { image, userId, username, fullName, position, description, posts, followe
     </div>
     <section class="px-4 py-1">
         <h1 class="font-semibold">
-            {{ username }}
+            {{ fullName ? fullName : username }}
 
         </h1>
 
-        <span class="text-sm text-black/50">Web Developer</span>
+        <span class="text-sm text-black/50">{{ position ? position : '' }}</span>
 
         <p class="text-sm">
-            {{ description }}
+            {{ description ? description : '' }}
         </p>
     </section>
 </template>

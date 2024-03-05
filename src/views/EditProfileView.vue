@@ -16,8 +16,11 @@ const { user } = storeToRefs(userStore);
 const image1Ref = ref(null);
 const profileForm = ref(null);
 const imagePreview = ref('');
+const isImageNew = ref(false);
 const file = ref(null);
-const caption = ref("");
+const description = ref("");
+const position = ref("");
+const fullName = ref("");
 const router = useRouter();
 const loading = ref(false);
 
@@ -30,13 +33,16 @@ const fetchData = async () => {
     }
     console.log(userData);
     imagePreview.value = `${sourceUrl}${userData.imageUrl}`;
-    caption.value = userData.description
+    description.value = userData.description
+    position.value = userData.position
+    fullName.value = userData.fullName
     loading.value = false;
 }
 
 const handleImagePreview = (e) => {
     const url = URL.createObjectURL(e.target.files[0]);
     imagePreview.value = url;
+    isImageNew.value = true;
     file.value = e.target.files[0];
 };
 
@@ -51,11 +57,23 @@ const uploadProfileImage = async () => {
     }
 
     filePath = data.path;
-    await supabase.from("users").update({
-        imageUrl: filePath,
-        description: caption.value,
-    })
-        .eq('id', user.value.id)
+    if (isImageNew.value) {
+        await supabase.from("users").update({
+            imageUrl: filePath,
+            description: description.value,
+            position: position.value,
+            fullName: fullName.value
+        })
+            .eq('id', user.value.id)
+    } else {
+        await supabase.from("users").update({
+            description: description.value,
+            position: position.value,
+            fullName: fullName.value
+        })
+            .eq('id', user.value.id)
+    }
+
 };
 
 const onSubmit = async () => {
@@ -64,8 +82,11 @@ const onSubmit = async () => {
         "type": "success",
         "dangerouslyHTMLString": true
     })
-    caption.value = "";
+    description.value = "";
     imagePreview.value = "";
+    position.value = "",
+        fullName.value = "";
+    isImageNew.value = false;
     file.value = null;
     router.push('/profile')
 };
@@ -77,7 +98,7 @@ onMounted(() => {
 
 <template>
     <Layout>
-        <TopNav title="Add new post" />
+        <TopNav title="Edit profile" />
         <div class="relative flex flex-col items-center justify-start w-full h-full gap-4 p-2 overflow-auto">
             <section class="flex items-center justify-center w-full">
                 <form @submit.prevent="onSubmit" ref="profileForm"
@@ -94,13 +115,31 @@ onMounted(() => {
                             class="object-cover w-[250px] h-[250px] rounded-full" />
                     </div>
                     <!-- Other form fields -->
-                    <div className="w-full">
-                        <label className="block mb-2 text-sm font-medium text-gray-900">
+                    <div class="grid w-full grid-cols-2 gap-2">
+                        <div class="w-full">
+                            <label class="block mb-2 text-sm font-medium text-gray-900">
+                                Full Name
+                            </label>
+                            <input v-model="fullName" type="text" id="fullName" name="fullName"
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-200 focus:border-blue-200"
+                                placeholder="Full Name" />
+                        </div>
+                        <div class="w-full">
+                            <label class="block mb-2 text-sm font-medium text-gray-900">
+                                Position
+                            </label>
+                            <input v-model="position" type="text" id="position" name="position"
+                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-200 focus:border-blue-200"
+                                placeholder="Position" />
+                        </div>
+                    </div>
+                    <div class="w-full">
+                        <label class="block mb-2 text-sm font-medium text-gray-900">
                             Description
                         </label>
-                        <textarea id="caption" name="caption" rows="12"
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-200 focus:border-blue-200 "
-                            placeholder="Description" v-model="caption"></textarea>
+                        <textarea id="description" name="description" rows="12"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-200 focus:border-blue-200 "
+                            placeholder="Description" v-model="description"></textarea>
                     </div>
                     <button type="submit"
                         class="text-white bg-blue-400 hover:bg-blue-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>

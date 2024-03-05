@@ -4,12 +4,13 @@ import TopNav from '@/components/TopNav.vue';
 import { supabase } from '@/supabase';
 import { useUsersStore } from '@/stores/users';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { useRouter } from 'vue-router';
 
-
+const router = useRouter();
 const userStore = useUsersStore();
 const { user } = storeToRefs(userStore);
 const image1Ref = ref(null);
@@ -52,10 +53,16 @@ const onSubmit = async () => {
     imagePreview.value = "";
     file.value = null;
 };
+
+onMounted(() => {
+    if (!userStore.user) {
+        return router.push('/login');
+    }
+})
 </script>
 
 <template>
-    <Layout>
+    <Layout v-if="userStore.user">
         <TopNav title="Add new post" />
         <div class="relative flex flex-col items-center justify-start w-full h-full gap-4 p-2 overflow-auto">
             <section class="flex items-center justify-center w-full">

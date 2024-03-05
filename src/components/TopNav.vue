@@ -38,7 +38,7 @@ const onLogout = () => {
                 </h1>
             </div>
 
-            <div class="flex flex-row items-center gap-3">
+            <div v-if="userStore.user" class="flex flex-row items-center gap-3">
                 <svg v-if="path !== '/profile'" class="w-6 h-6" data-slot="icon" fill="none" stroke-width="1.5"
                     stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -61,6 +61,9 @@ const onLogout = () => {
                             stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
                     </svg>
                 </RouterLink>
+            </div>
+            <div v-else class="flex flex-row items-center gap-3">
+                <RouterLink to="/login" class="p-2 text-white bg-blue-400 rounded-md">Login</RouterLink>
             </div>
         </div>
     </div>

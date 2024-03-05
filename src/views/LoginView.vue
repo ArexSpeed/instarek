@@ -3,7 +3,7 @@ import GuestLayout from '@/components/GuestLayout.vue';
 import { reactive, ref } from 'vue';
 import { useUsersStore } from "@/stores/users";
 import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
+import { useRouter, RouterLink } from 'vue-router';
 
 const userStore = useUsersStore();
 const { errorMessage, loading, user } = storeToRefs(userStore);
@@ -52,6 +52,7 @@ const handleOk = async (e) => {
 <template>
     <GuestLayout>
         <div class="flex flex-col items-center justify-center w-full h-screen p-2">
+            <RouterLink to="/" class="text-2xl">Instarek</RouterLink>
             <form class="w-full max-w-sm mx-auto " @submit="handleOk">
                 <div class="mb-5">
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Your
