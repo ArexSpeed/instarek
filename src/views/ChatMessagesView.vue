@@ -44,16 +44,18 @@ onMounted(() => {
 
 <template>
     <GuestLayout>
-        <ChatHeader />
-        <div class="flex flex-col w-full h-full p-2">
-            <div class="flex flex-col gap-2 pt-20 pb-32">
-                <ChatBubble v-for="message in messages" :ownMsg="message.userId === loggedUser.id" :msg="message" />
+        <div class="w-full">
+            <ChatHeader />
+            <div class="flex flex-col w-full h-full p-2">
+                <div class="flex flex-col gap-2 pt-20 pb-32">
+                    <ChatBubble v-for="message in messages" :ownMsg="message.userId === loggedUser.id" :msg="message" />
 
 
-                <div ref="messagesEndRef"></div>
-            </div>
-            <div class="fixed bottom-0 w-full">
-                <ChatInput chatId={chatId} />
+                    <div ref="messagesEndRef"></div>
+                </div>
+                <div class="fixed bottom-0 w-full">
+                    <ChatInput chatId={chatId} />
+                </div>
             </div>
         </div>
     </GuestLayout>

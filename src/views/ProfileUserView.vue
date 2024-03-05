@@ -13,7 +13,7 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import ProfileDetails from '@/components/ProfileDetails.vue';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 const router = useRouter();
@@ -33,7 +33,6 @@ const userInfo = reactive({
 })
 
 const fetchData = async () => {
-    console.log('fetching')
     loading.value = true;
     const { data: userData } = await supabase.from("users").select().eq('id', userId).single();
 
@@ -45,7 +44,6 @@ const fetchData = async () => {
     fetchUserPosts();
 
     loading.value = false;
-    console.log(currentUser.value)
 }
 
 const fetchUserPosts = async () => {
@@ -104,9 +102,35 @@ const fetchFollowingCount = async () => {
     return count;
 }
 
+async function getUserChats() {
+    const chats = [];
+    const chatRef = collection(db, "instachats");
+
+    const querySnapshot = await getDocs(chatRef);
+    querySnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.users.some(user => user.id === loggedUser.value.id)) {
+            chats.push({
+                ...data,
+                id: doc.id
+            });
+        }
+    })
+    return chats;
+}
+const isChatExist = (chats) => {
+    const findChat = chats?.find((chat) =>
+        chat.users.find((user) => user.id === currentUser.value.id)
+    );
+    return findChat;
+};
+
 async function createNewChatToDb() {
-    console.log("logged", loggedUser.value)
-    console.log("current", currentUser.value)
+    const chats = await getUserChats();
+    const chatExist = isChatExist(chats);
+    if (chatExist) {
+        return router.push(`/chats/${chatExist.id}`);
+    }
     const users = [
         {
             id: loggedUser.value.id,

@@ -1,6 +1,6 @@
 <script setup>
 import { db } from '@/firebase';
-import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { ref } from 'vue';
 import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia';
@@ -25,6 +25,9 @@ const onSubmit = async (e) => {
 
     try {
         await addDoc(messagesRef, payload);
+        await updateDoc(roomRef, {
+            lastMessage: newMessage.value
+        });
         newMessage.value = ""
     } catch (error) {
         console.error("Error adding message: ", error);
@@ -33,8 +36,8 @@ const onSubmit = async (e) => {
 </script>
 
 <template>
-    <div class="flex flex-row items-center w-full max-w-[640px] h-16 px-2 bg-white">
-        <div class="flex flex-grow w-full">
+    <div class="flex flex-row items-center w-full max-w-[640px] h-16 bg-white">
+        <div class="flex flex-grow w-full pr-2">
             <form @submit.prevent="onSubmit" class="relative w-full">
                 <input v-model="newMessage" type="text" name="message" id="message" value="" placeholder="Send message"
                     className="flex w-full h-10 pl-4 text-black bg-gray-100 border rounded-xl focus:outline-none focus:border-blue-300" />
@@ -47,16 +50,6 @@ const onSubmit = async (e) => {
                     </svg>
                 </button>
             </form>
-        </div>
-        <div class="pr-2 ml-4">
-            <button type="submit" class="flex items-center justify-center bg-transparent outline-none" @click="">
-                <svg class="w-6 h-6 text-gray-900" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5">
-                    </path>
-                </svg>
-            </button>
         </div>
     </div>
 </template>

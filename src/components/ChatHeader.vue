@@ -3,8 +3,7 @@ import { ref, onMounted } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia';
-import { useDocument } from 'vuefire'
-import { collection, doc } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase';
 import { sourceUrl } from '@/supabase';
 
@@ -16,9 +15,18 @@ const { chatId } = route.params;
 const userWithChat = ref({});
 
 const fetchData = async () => {
-    const chat = useDocument(doc(collection(db, 'instachats'), chatId))
-    console.log(chat)
-    userWithChat.value = chat.value.users.find((c) => c.id !== loggedUser.value.id) //data of second user not you
+
+    try {
+        const chatRef = doc(db, 'instachats', chatId);
+        const docSnap = await getDoc(chatRef);
+        if (docSnap.exists()) {
+            userWithChat.value = docSnap.data().users.find((c) => c.id !== loggedUser.value.id);
+        } else {
+            console.log('No such document!');
+        }
+    } catch (error) {
+        console.error('Error getting document: ', error);
+    }
 }
 
 const goBack = () => {
@@ -38,13 +46,13 @@ onMounted(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
             </svg>
         </button>
-        <div class="flex items-center gap-4 p-2">
+        <RouterLink :to="`/profile/${userWithChat.id}`" class="flex items-center gap-4 p-2">
             <img class="object-cover w-10 h-10 rounded-full" :src="`${sourceUrl}${userWithChat.imageUrl}`" alt="" />
             <div class="font-medium text-black">
                 <span class="text-lg">
                     {{ userWithChat.username }}
                 </span>
             </div>
-        </div>
+        </RouterLink>
     </div>
 </template>
