@@ -156,7 +156,7 @@ async function createNewChatToDb() {
 
 
 onMounted(() => {
-    if (loggedUser.value.id.toString() === userId) {
+    if (loggedUser?.value?.id.toString() === userId) {
         router.push('/profile');
     }
     fetchData();

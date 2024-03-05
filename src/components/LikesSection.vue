@@ -22,7 +22,9 @@ const comments = ref([]);
 
 const fetchLikes = async () => {
     const { data: likesData } = await supabase.from("likes").select().eq('post_id', post.value.id)
-    isLiked.value = likesData.find((like) => like.user_id === user.value.id)
+    if (user.value) {
+        isLiked.value = likesData.find((like) => like.user_id === user.value.id)
+    }
     likesCounter.value = likesData.length;
     //onsole.log("likes", likesData);
 }
@@ -38,10 +40,12 @@ const fetchComments = async () => {
 const addLike = async () => {
     isLiked.value = true;
     likesCounter.value += 1;
-    await supabase.from("likes").insert({
-        post_id: post.value.id,
-        user_id: user.value.id
-    })
+    if (user.value) {
+        await supabase.from("likes").insert({
+            post_id: post.value.id,
+            user_id: user.value.id
+        })
+    }
 }
 
 onMounted(() => {
