@@ -52,7 +52,9 @@ const handleOk = async (e) => {
 <template>
     <GuestLayout>
         <div class="flex flex-col items-center justify-center w-full h-screen p-2">
-            <RouterLink to="/" class="text-2xl">Instarek</RouterLink>
+            <RouterLink to="/"
+                class="py-4 text-[40px] font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-blue-600 font-riot">
+                Instarek</RouterLink>
             <form class="w-full max-w-sm mx-auto " @submit="handleOk">
                 <div class="mb-5">
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Your

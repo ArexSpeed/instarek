@@ -26,9 +26,9 @@ type Post = {
 </script>
 
 <template>
-    <div id="Posts" class="px-4 max-w-[600px] mx-auto mt-10" v-for="post in posts" :key="post.id">
+    <div id="Posts" class="max-w-[600px] mx-auto mt-10" v-for="post in posts" :key="post.id">
         <div class="flex items-center justify-between py-2">
-            <div class="flex items-center">
+            <div class="flex items-center px-2">
                 <RouterLink :to="`/profile/${post.owner_id.id.toString()}`" class="flex items-center">
                     <img class="rounded-full w-9 h-9"
                         :src="`${post.owner_id.imageUrl ? `${sourceUrl}${post.owner_id.imageUrl}` : `https://images.pexels.com/photos/18771871/pexels-photo-18771871/free-photo-of-town-with-beach-on-amalfi-coast.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}`">

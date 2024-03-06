@@ -187,7 +187,7 @@ watch(loggedUser, () => {
                     class="p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-bold bg-gray-100 hover:bg-gray-200">
                     Followed
                 </button>
-                <button @click="createNewChatToDb"
+                <button @click="createNewChatToDb" :disabled="!loggedUser"
                     class="p-1 px-4 max-w-[260px] w-full rounded-lg text-[17px] font-bold border border-blue-400 hover:bg-gray-100">
                     Message
                 </button>

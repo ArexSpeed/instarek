@@ -1,57 +1,21 @@
 <script setup>
-import { supabase } from '@/supabase';
-import { computed, onMounted, toRefs, ref } from 'vue';
+import { ref } from 'vue';
 import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia';
 import CommentsDialog from './CommentsDialog.vue';
-import { provide } from 'vue'
 
-const props = defineProps(['post'])
-const { post } = toRefs(props)
-
-const emit = defineEmits(['like'])
-provide('postIdForComment', post.value.id)
-
+const { post } = defineProps(['post'])
 const userStore = useUsersStore();
 const { user } = storeToRefs(userStore);
 const isLiked = ref(false);
-const likesCounter = ref(0);
+const likesCounter = ref(Math.floor(Math.random() * 30));
 const commentsCounter = ref(0);
 const comments = ref([]);
-
-
-const fetchLikes = async () => {
-    const { data: likesData } = await supabase.from("likes").select().eq('post_id', post.value.id)
-    if (user.value) {
-        isLiked.value = likesData.find((like) => like.user_id === user.value.id)
-    }
-    likesCounter.value = likesData.length;
-    //onsole.log("likes", likesData);
-}
-
-const fetchComments = async () => {
-    //loading.value = true;
-    const { data: commentsData } = await supabase.from("comments").select('*, user_id(id, username, imageUrl)').eq('post_id', post.value.id)
-    commentsCounter.value = commentsData.length
-    comments.value = commentsData;
-    //loading.value = false;
-}
 
 const addLike = async () => {
     isLiked.value = true;
     likesCounter.value += 1;
-    if (user.value) {
-        await supabase.from("likes").insert({
-            post_id: post.value.id,
-            user_id: user.value.id
-        })
-    }
 }
-
-onMounted(() => {
-    fetchLikes();
-    fetchComments();
-})
 
 // Comments dialog
 const isOpen = ref(false)
@@ -105,8 +69,8 @@ function setIsOpen(value) {
     <div class="px-2">
         <div class="my-2 text-sm font-medium">{{ likesCounter }} likes</div>
         <div class="flex space-x-2 text-sm">
-            <a href="" class="font-medium">{{ post.owner_id.username }}</a>
-            <p>{{ post.caption }}</p>
+            <a href="" class="font-medium">{{ post.name }}</a>
+            <p></p>
         </div>
         <div class="py-2 text-sm text-gray-400 cursor-pointer" @click="setIsOpen(true)">View all {{ commentsCounter }}
             comments

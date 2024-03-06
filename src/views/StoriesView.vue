@@ -27,7 +27,7 @@ onMounted(() => {
         <div class="flex items-center justify-center w-full h-full">
             <iframe v-if="!loading"
                 :src="`https://bwglppilzhoxmasmvsra.supabase.co/storage/v1/object/public/stories/${stories[0]?.url}`"
-                class="aspect-auto min-h-[550px] w-full"></iframe>
+                class="aspect-auto min-h-[550px] w-full" allow='autoplay'></iframe>
         </div>
     </GuestLayout>
 </template>
