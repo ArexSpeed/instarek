@@ -13,7 +13,7 @@ const { storyId, username } = defineProps(['storyId', 'username'])
         </div>
 
         <span class="text-sm text-gray-800">
-            {{ username }}
+            {{ username.substring(0, 8) }}
         </span>
     </RouterLink>
 </template>

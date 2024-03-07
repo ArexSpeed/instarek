@@ -17,7 +17,6 @@ const fetchPosts = async () => {
   // const { data: postsData } = await supabase.from("posts").select() - > retrieve just posts data (id, url, caption, owner_id)
   posts.value = postsData;
   loading.value = false;
-  console.log(postsData);
 }
 
 const fetchStories = async () => {

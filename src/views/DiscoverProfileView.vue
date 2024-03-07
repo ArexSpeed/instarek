@@ -3,6 +3,7 @@ import TopNav from '@/components/TopNav.vue';
 import DiscoverPost from '@/components/DiscoverPost.vue';
 import { useRoute } from 'vue-router';
 import discovers from "@/data/discover.json";
+import Layout from '@/components/Layout.vue';
 
 const route = useRoute();
 const { id } = route.params;

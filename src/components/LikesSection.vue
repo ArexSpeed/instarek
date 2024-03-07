@@ -53,6 +53,23 @@ onMounted(() => {
     fetchComments();
 })
 
+// Checking for realtime
+// const subComments = supabase.channel('custom-all-channel')
+//     .on(
+//         'postgres_changes',
+//         { event: '*', schema: 'public', table: 'comments' },
+//         (payload) => {
+//             console.log('comment changed', payload);
+//             //fetchComments();
+//             console.log('comments bef', comments.value);
+//             //comments.value = [...comments.value, payload.new]
+//             // commentsCounter.value += 1;
+//             console.log("comments new", comments.value);
+//             info.value = payload.new.comment;
+//             // ({ data: allChats } = await getAllChats());
+//         }
+//     ).subscribe();
+
 // Comments dialog
 const isOpen = ref(false)
 
