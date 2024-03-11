@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import DiscoverView from '@/views/DiscoverView.vue'
 import DiscoverProfileView from '@/views/DiscoverProfileView.vue'
 import AddPostView from '@/views/AddPostView.vue'
+import EditPostView from '@/views/EditPostView.vue'
 import AddStoriesView from '@/views/AddStoriesView.vue'
 import VideoView from '@/views/VideoView.vue'
 import ProfileView from '@/views/ProfileView.vue'
@@ -39,6 +40,11 @@ const router = createRouter({
       path: '/addpost',
       name: 'addpost',
       component: AddPostView
+    },
+    {
+      path: '/editpost/:postId',
+      name: 'editpost',
+      component: EditPostView
     },
     {
       path: '/addstories',
