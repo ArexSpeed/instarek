@@ -21,7 +21,7 @@ const fetchPosts = async () => {
 
 const fetchStories = async () => {
   loading.value = true;
-  const { data: storiesData } = await supabase.from("stories").select('*, owner_id(*)')
+  const { data: storiesData } = await supabase.from("stories").select('*, owner_id(*)').order('created_at', { ascending: false })
   stories.value = storiesData;
   loading.value = false;
 }

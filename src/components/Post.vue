@@ -61,43 +61,45 @@ const deletePost = async (id) => {
 
             <!-- <DotsHorizontal v-if="loggedUser.id === post.owner_id.id" @click="editPosts" class="cursor-pointer"
                 :size="27" /> -->
-            <Menu v-if="loggedUser.id === post.owner_id.id" as="div" class="relative inline-block text-left">
-                <div>
-                    <MenuButton class="">
+            <div v-if='loggedUser'>
+                <Menu v-if="loggedUser.id === post.owner_id.id" as="div" class="relative inline-block text-left">
+                    <div>
+                        <MenuButton class="">
 
-                        <DotsHorizontal class="cursor-pointer" :size="27" />
-                    </MenuButton>
-                </div>
+                            <DotsHorizontal class="cursor-pointer" :size="27" />
+                        </MenuButton>
+                    </div>
 
-                <transition enter-active-class="transition duration-100 ease-out"
-                    enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
-                    leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100"
-                    leave-to-class="transform scale-95 opacity-0">
-                    <MenuItems
-                        class="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none">
-                        <div class="px-1 py-1">
-                            <MenuItem v-slot="{ active }">
-                            <RouterLink :to="`/editpost/${post.id}`" :class="[
-                                active ? 'bg-violet-500 text-white' : 'text-gray-900',
-                                'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                            ]">
+                    <transition enter-active-class="transition duration-100 ease-out"
+                        enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+                        leave-active-class="transition duration-75 ease-in"
+                        leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+                        <MenuItems
+                            class="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none">
+                            <div class="px-1 py-1">
+                                <MenuItem v-slot="{ active }">
+                                <RouterLink :to="`/editpost/${post.id}`" :class="[
+                                    active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]">
 
-                                Edit
-                            </RouterLink>
-                            </MenuItem>
-                            <MenuItem v-slot="{ active }">
-                            <button :class="[
-                                active ? 'bg-violet-500 text-white' : 'text-gray-900',
-                                'group flex w-full items-center rounded-md px-2 py-2 text-sm',
-                            ]" @click="deletePost(post.id)">
+                                    Edit
+                                </RouterLink>
+                                </MenuItem>
+                                <MenuItem v-slot="{ active }">
+                                <button :class="[
+                                    active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]" @click="deletePost(post.id)">
 
-                                Delete
-                            </button>
-                            </MenuItem>
-                        </div>
-                    </MenuItems>
-                </transition>
-            </Menu>
+                                    Delete
+                                </button>
+                                </MenuItem>
+                            </div>
+                        </MenuItems>
+                    </transition>
+                </Menu>
+            </div>
             <DotsHorizontal v-else class="cursor-pointer" :size="27" />
         </div>
 
